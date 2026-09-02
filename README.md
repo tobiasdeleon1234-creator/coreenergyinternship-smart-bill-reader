@@ -1,6 +1,6 @@
 # Smart Bill Reader
 
-A small full-stack web application built for the COREnergy Software Engineering Intern examination. Users can upload a PNG, JPG/JPEG, or PDF copy of a utility bill or invoice. The backend sends the document to the Gemini API for multimodal document understanding and returns a validated JSON response containing the requested fields.
+This is a simple web application created for the COREnergy Software Engineering Intern examination. Users can upload a PNG, JPG/JPEG, or PDF copy of a utility bill or invoice. The backend sends the document to the Gemini API for document analysis and returns a validated JSON response containing the requested fields.
 
 ## Features
 
@@ -19,18 +19,18 @@ A small full-stack web application built for the COREnergy Software Engineering 
 - Model-estimated readability confidence shown in the UI
 - Dockerized application
 
-> Note: the displayed confidence values are **model-estimated readability confidence**, not calibrated confidence scores returned natively by the Gemini API.
+> Note: the displayed confidence values are **model-estimated readability confidence**. It is not calibrated confidence scores returned natively by the Gemini API.
 
 ## Technology Stack
 
 - **Frontend:** Plain HTML, CSS, and JavaScript
 - **Backend:** Python + FastAPI
-- **AI/OCR:** Google Gemini Developer API (`gemini-3.7-flash` by default)
+- **AI/OCR:** Google Gemini Developer API (`gemini-3.6-flash` by default)
 - **Container:** Docker / Docker Compose
 
-## Why Gemini?
+## Why Gemini, and not other AI?
 
-The task requires extracting structured data from both images and PDFs. Gemini can accept image and PDF inputs directly and supports structured JSON output using a supplied JSON Schema. This keeps the implementation small while still allowing the application to understand document layout, not only raw OCR text.
+Gemini was chosen because it offers a practical balance of multimodal document understanding, structured JSON output, speed, and low setup complexity. It can process both images and PDFs directly, which makes it suitable for extracting fields like vendor name, invoice date, tax, totals, and line items in one workflow. Compared with more specialized services such as AWS Textract or Google Document AI, Gemini requires less cloud infrastructure and configuration for a prototype of this scale. It was also a cost-effective choice for development and testing.
 
 The model name is stored in an environment variable (`GEMINI_MODEL`) so it can be changed later without modifying application code.
 
@@ -183,6 +183,8 @@ The application handles:
 - Clearly non-bill files → HTTP 422
 - AI/API failures → HTTP 502 with a user-friendly frontend message
 - Missing server API key → HTTP 500
+
+Temporary Gemini API failures are retried up to three total attempts using exponential backoff. Retries are limited to transient errors such as HTTP 429, 500, 502, 503, and 504. Permanent failures such as invalid authentication are returned immediately rather than retried.
 
 ## Assumptions and Trade-offs
 
