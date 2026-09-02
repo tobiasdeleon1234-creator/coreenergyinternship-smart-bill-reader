@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Smart Bill Reader</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="eyebrow">AI-ASSISTED BILL EXTRACTION</div>
+      <h1>Smart Bill Reader</h1>
+      <p class="hero-description">Turn utility bills and invoices into clean, structured billing data in just a few steps.</p>
+    </section>
+
+    <section class="panel" aria-labelledby="upload-title">
+      <div class="panel-heading">
+        <div>
+          <h2 id="upload-title">Upload a bill</h2>
+          <p>PNG, JPG/JPEG, or PDF • Maximum 10 MB</p>
+          <p class="privacy-note">Your upload is processed for extraction and is not permanently stored by this application.</p>
+        </div>
+      </div>
+
+      <div id="drop-zone" class="drop-zone" tabindex="0" role="button" aria-label="Upload a bill or invoice">
+        <div class="upload-icon">↑</div>
+        <strong>Drag & drop your bill or invoice here</strong>
+        <span>or click to choose a PNG, JPG, or PDF</span>
+        <input id="file-input" type="file" accept=".png,.jpg,.jpeg,.pdf,image/png,image/jpeg,application/pdf" hidden />
+      </div>
+
+      <div id="file-row" class="file-row hidden">
+        <div>
+          <strong id="file-name"></strong>
+          <span id="file-size"></span>
+        </div>
+        <button id="clear-file" class="link-button" type="button">Remove</button>
+      </div>
+
+      <button id="analyze-button" class="primary-button" type="button" disabled>Extract Bill Details</button>
+
+      <div id="loading" class="loading hidden" role="status" aria-live="polite">
+        <div class="spinner"></div>
+        <div>
+          <strong>Scanning bill details...</strong>
+          <span>Please wait while the bill is being analyzed.</span>
+        </div>
+      </div>
+
+      <div id="error" class="error hidden" role="alert"></div>
+    </section>
+
+    <section class="how-it-works">
+      <div class="section-heading">
+        <span class="section-label">HOW IT WORKS</span>
+        <h2>From document to structured data</h2>
+      </div>
+
+      <div class="steps-grid">
+        <article class="step-card">
+          <div class="step-number">01</div>
+          <h3>Upload</h3>
+          <p>Choose a clear PNG, JPG, or PDF copy of a utility bill or invoice.</p>
+        </article>
+
+        <article class="step-card">
+          <div class="step-number">02</div>
+          <h3>Extract</h3>
+          <p>The file is validated and securely sent for AI-assisted document analysis.</p>
+        </article>
+
+        <article class="step-card">
+          <div class="step-number">03</div>
+          <h3>Review</h3>
+          <p>Review the extracted vendor, invoice date, totals, tax, and line-item details.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="results" class="panel hidden" aria-live="polite">
+      <div class="panel-heading results-heading">
+        <div>
+          <div class="eyebrow">EXTRACTION RESULT</div>
+          <h2>Extracted Billing Summary</h2>
+        </div>
+        <button id="reset-button" class="secondary-button" type="button">Analyze Another Bill</button>
+      </div>
+
+      <div class="summary-grid">
+        <article class="result-card">
+          <span>Vendor</span>
+          <strong id="vendor-name">—</strong>
+          <small id="vendor-confidence"></small>
+        </article>
+        <article class="result-card">
+          <span>Invoice date</span>
+          <strong id="invoice-date">—</strong>
+          <small id="date-confidence"></small>
+        </article>
+        <article class="result-card">
+          <span>Total amount</span>
+          <strong id="total-amount">—</strong>
+          <small id="total-confidence"></small>
+        </article>
+        <article class="result-card">
+          <span>Tax amount</span>
+          <strong id="tax-amount">—</strong>
+          <small id="tax-confidence"></small>
+        </article>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-title-row">
+          <h3>Line items</h3>
+          <span id="line-confidence"></span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody id="line-items-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
